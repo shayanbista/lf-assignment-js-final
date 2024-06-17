@@ -1,12 +1,18 @@
 import { Sprite } from "./sprite";
-import { Tile } from "./tile";
+// import { Tile } from "./tile";
 import { Character } from "./character";
 
 let gameCanvas: HTMLCanvasElement;
 let gameCtx: CanvasRenderingContext2D;
 let map: (string | null)[][];
 let dave: Character;
-const TILE_SIZE = 50;
+let TILE_SIZE = 50;
+
+let keys = {
+  up: { hold: false },
+  right: { hold: false },
+  left: { hold: false },
+};
 
 export function startGame(newMap: (string | null)[][]) {
   map = newMap;
@@ -22,24 +28,19 @@ export function startGame(newMap: (string | null)[][]) {
           {
             getTile,
             input: {
-              keys: {
-                up: { hold: false },
-                right: { hold: false },
-                left: { hold: false },
-              },
+              keys,
             },
           },
           x * TILE_SIZE,
           y * TILE_SIZE
         );
-        console.log(`Dave's initial grid position: (${x}, ${y})`);
+
         break;
       }
     }
   }
 
   renderGame();
-
   window.addEventListener("keydown", handleInput);
   window.addEventListener("keyup", stopInput);
   window.requestAnimationFrame(gameLoop);
@@ -126,26 +127,23 @@ function renderTile(tile: string, x: number, y: number) {
 
 function handleInput(e: KeyboardEvent) {
   if (e.key === "ArrowRight") {
-    console.log("i am moving dave");
-    dave.velX = 5;
+    keys.right.hold = true;
     dave.direction = 1;
-    dave.posX += dave.velX;
     dave.animationFrame = (dave.animationFrame + 1) % 4;
   } else if (e.key === "ArrowLeft") {
-    dave.velX = -5;
+    keys.left.hold = true;
     dave.direction = -1;
-    dave.posX += dave.velX;
     dave.animationFrame = (dave.animationFrame + 1) % 4;
   } else if (e.key === "ArrowUp" && dave.canJump()) {
     dave.velY += 5;
-    console.log(dave);
     dave.jumping = true;
   }
 }
 
 function stopInput(e: KeyboardEvent) {
   if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
-    dave.velX = 0;
+    keys.right.hold = false;
+    keys.left.hold = false;
   }
 }
 

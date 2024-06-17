@@ -44,7 +44,7 @@ export function initializeMapEditor() {
     row.map((tile) => (tile === " " ? null : tile))
   );
 
-  // Load the tileset image
+  // Loading the tileset image
   const tilesetImage = new Image();
   tilesetImage.src = "assets/sprites/tileset.png";
 
@@ -169,7 +169,7 @@ export function initializeMapEditor() {
       mapCanvas.height - DRAW_SIZE,
       mapCanvas.width,
       DRAW_SIZE
-    ); 
+    );
     mapCtx.fillStyle = "white";
     mapCtx.font = "bold 16px Arial";
     mapCtx.fillText(
